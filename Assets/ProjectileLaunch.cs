@@ -4,74 +4,67 @@ using UnityEngine;
 
 public class ProjectileLaunch : MonoBehaviour
 {
-    public Transform projectile;
-    public Transform target;
-    public Camera playerCamera;
+    public Transform projectile; // TODO instantiate
     public float firingAngle = 45.0f;
     public float gravity = 9.8f;
-    [Range(1f, 8f)] public float minDist = 4f;
+    [Range(1f, 8f)] public float minDist = 5f;
     
     [HideInInspector] public Vector3 targetPos;
-    private Vector3 linePos;
     private int speed = 10;
+    private float distToThrow;
+    private int throwIncreaseSpeed = 10;
     private Coroutine coroutine;
     
     void Start(){          
-        coroutine = StartCoroutine(Simulateprojectile());
+        distToThrow = minDist;
     }
 
-    void Move(){ 
-        Vector3 movement = new Vector3(Input.GetAxis("Horizontal"), 0, Input.GetAxis("Vertical"));
-        transform.position += movement * speed * Time.deltaTime;
-    }
-
-    void RotatePlayer(){ 
-        Ray mouseRay = playerCamera.ScreenPointToRay(Input.mousePosition);
-        Plane p = new Plane( Vector3.up, transform.position );
-        if( p.Raycast( mouseRay, out float hitDist) ){
-            Vector3 hitPoint = mouseRay.GetPoint( hitDist );
-            transform.LookAt( hitPoint );
+    void HandleMouseButton(){
+        if(coroutine == null){
+            // if (Input.GetMouseButtonDown(0)){
+            //     Debug.Log("Pressed primary button.");
+            // }
+            if (Input.GetMouseButton(0)){
+                Debug.Log("Holding primary button.");
+                distToThrow += Time.deltaTime * throwIncreaseSpeed;
+            }
+            else if (Input.GetMouseButtonUp(0)){
+                Debug.Log("Primary button UP.");
+                coroutine = StartCoroutine(Simulateprojectile(transform.position, targetPos));
+                distToThrow = minDist;
+            }
         }
     }
-    
+
     void Update(){
-        // Debug.Log(cr);
-        linePos = transform.position + transform.forward * minDist;
-        targetPos = new Vector3(linePos.x, projectile.localScale.y / 2,linePos.z);
+        // Debug.Log(coroutine);
 
-        Move();
-        RotatePlayer();
-    }
+        Vector3 v = transform.position + transform.forward * distToThrow;
+        targetPos = new Vector3(v.x, projectile.localScale.y / 2, v.z);
 
-    void OnDrawGizmosSelected(){
-        if (target != null){
-            Gizmos.color = Color.red;
-            Gizmos.DrawLine(transform.position, linePos);
-        }
+        HandleMouseButton();
     }
  
-    IEnumerator Simulateprojectile(){
-        // Short delay added before projectile is thrown
-        yield return new WaitForSeconds(1.5f);
-
+    IEnumerator Simulateprojectile(Vector3 playerPos, Vector3 targPos){
         // Move projectile to the position of throwing object + add some offset if needed
-        projectile.position = transform.position + new Vector3(0, 0.0f, 0);
+        projectile.speed = Vector3.zero;
+        projectile.position = playerPos;
        
         // Calculate distance to target
-        float target_Distance = Vector3.Distance(projectile.position, targetPos);
+        float targetDist = Vector3.Distance(projectile.position, targPos);
  
         // Calculate the velocity needed to throw the object to the target at specified angle
-        float projectile_Velocity = target_Distance / (Mathf.Sin(2 * firingAngle * Mathf.Deg2Rad) / gravity);
+        float projectileVel = targetDist / (Mathf.Sin(2 * firingAngle * Mathf.Deg2Rad) / gravity);
  
         // Extract the X  Y componenent of the velocity
-        float Vx = Mathf.Sqrt(projectile_Velocity) * Mathf.Cos(firingAngle * Mathf.Deg2Rad);
-        float Vy = Mathf.Sqrt(projectile_Velocity) * Mathf.Sin(firingAngle * Mathf.Deg2Rad);
+        float Vx = Mathf.Sqrt(projectileVel) * Mathf.Cos(firingAngle * Mathf.Deg2Rad);
+        float Vy = Mathf.Sqrt(projectileVel) * Mathf.Sin(firingAngle * Mathf.Deg2Rad);
  
         // Calculate flight time
-        float flightDuration = target_Distance / Vx;
+        float flightDuration = targetDist / Vx;
    
         // Rotate projectile to face the target
-        projectile.rotation = Quaternion.LookRotation(targetPos - projectile.position);
+        projectile.rotation = Quaternion.LookRotation(targPos - projectile.position);
        
         float elapse_time = 0;
         while (elapse_time < flightDuration)
