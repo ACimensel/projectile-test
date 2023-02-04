@@ -47,7 +47,6 @@ public class ProjectileLaunch : MonoBehaviour
  
     IEnumerator Simulateprojectile(Vector3 playerPos, Vector3 targPos){
         // Move projectile to the position of throwing object + add some offset if needed
-        projectile.speed = Vector3.zero;
         projectile.position = playerPos;
        
         // Calculate distance to target
