@@ -7,13 +7,10 @@ public class PlayerController : MonoBehaviour
     public Camera playerCamera;
 
     private int speed = 10;
-    private Vector3 linePos;
 
     void Update(){
         Move();
         RotatePlayer();
-
-        linePos = transform.position + transform.forward * 4f;
     }
 
     void Move(){ 
@@ -28,10 +25,5 @@ public class PlayerController : MonoBehaviour
             Vector3 hitPoint = mouseRay.GetPoint( hitDist );
             transform.LookAt( hitPoint );
         }
-    }
-
-    void OnDrawGizmosSelected(){
-        Gizmos.color = Color.red;
-        Gizmos.DrawLine(transform.position, linePos);
     }
 }
