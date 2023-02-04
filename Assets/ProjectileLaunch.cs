@@ -6,6 +6,7 @@ public class ProjectileLaunch : MonoBehaviour
 {
     public Transform projectile;
     public Transform target;
+    public Camera playerCamera;
 
     public float firingAngle = 45.0f;
     public float gravity = 9.8f;
@@ -16,14 +17,30 @@ public class ProjectileLaunch : MonoBehaviour
 
     Coroutine cr;
     
+    private Vector3 mouseTurn = Vector3.zero;
+    public float sensitivity = 1.5f;
+
     void Start(){          
         cr = StartCoroutine(Simulateprojectile());
         yTargetOffset = target.position + new Vector3(0, projectile.localScale.y / 2, 0);
+
+        Cursor.lockState = CursorLockMode.Locked;
     }
     
     void Update(){
-        Debug.Log(cr);
+        // Debug.Log(cr);
         targetPos = transform.position + transform.forward * minDist;
+
+        // mouseTurn.x += Input.GetAxis("Mouse X") * sensitivity;
+        // mouseTurn.z += Input.GetAxis("Mouse Z") * sensitivity;
+        // transform.localRotation = Quaternion.Euler(-mouseTurn.y, 0, mouseTurn.x);
+
+        Ray mouseRay = playerCamera.ScreenPointToRay(Input.mousePosition);
+        Plane p = new Plane( Vector3.up, transform.position );
+        if( p.Raycast( mouseRay, out float hitDist) ){
+            Vector3 hitPoint = mouseRay.GetPoint( hitDist );
+            transform.LookAt( hitPoint );
+        }
     }
 
     void OnDrawGizmosSelected(){
