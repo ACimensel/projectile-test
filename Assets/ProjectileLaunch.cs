@@ -4,28 +4,33 @@ using UnityEngine;
 
 public class ProjectileLaunch : MonoBehaviour
 {
-    private Transform player;
     public Transform projectile;
     public Transform target;
 
     public float firingAngle = 45.0f;
     public float gravity = 9.8f;
+    [Range(1f, 10f)] public float minDist = 8f;
     
     private Vector3 yTargetOffset;
+    private Vector3 targetPos;
 
     Coroutine cr;
-
-    void Awake(){
-        player = transform;      
-    }
     
     void Start(){          
         cr = StartCoroutine(Simulateprojectile());
-        yTargetOffset = target.position + new Vector3(0, 0.25f, 0);
+        yTargetOffset = target.position + new Vector3(0, projectile.localScale.y / 2, 0);
     }
-
+    
     void Update(){
         Debug.Log(cr);
+        targetPos = transform.position + transform.forward * minDist;
+    }
+
+    void OnDrawGizmosSelected(){
+        if (target != null){
+            Gizmos.color = Color.red;
+            Gizmos.DrawLine(transform.position, targetPos);
+        }
     }
  
     IEnumerator Simulateprojectile(){
@@ -33,7 +38,7 @@ public class ProjectileLaunch : MonoBehaviour
         yield return new WaitForSeconds(1.5f);
        
         // Move projectile to the position of throwing object + add some offset if needed.
-        projectile.position = player.position + new Vector3(0, 0.0f, 0);
+        projectile.position = transform.position + new Vector3(0, 0.0f, 0);
        
         // Calculate distance to target
         float target_Distance = Vector3.Distance(projectile.position, yTargetOffset);
