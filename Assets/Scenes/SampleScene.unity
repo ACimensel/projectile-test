@@ -213,7 +213,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 373694053}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 22.72, y: 0.25, z: -14.62}
+  m_LocalPosition: {x: 1.15, y: 0.25, z: 7.87}
   m_LocalScale: {x: 0.5, y: 0.5, z: 0.5}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -483,8 +483,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 823692318}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 4, y: 0, z: -10}
-  m_LocalScale: {x: 3, y: 0.01, z: 3}
+  m_LocalPosition: {x: 7.59, y: 0, z: 0.07}
+  m_LocalScale: {x: 1.5, y: 0.01, z: 1.5}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
@@ -566,14 +566,14 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 963194225}
-  m_LocalRotation: {x: 0.18003073, y: 0.68380475, z: -0.18003073, w: 0.68380475}
-  m_LocalPosition: {x: -10.17, y: 7.33, z: -3.6}
+  m_LocalRotation: {x: 0.25460193, y: 0, z: 0, w: 0.967046}
+  m_LocalPosition: {x: 2.31, y: 8.31, z: -13.45}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 0
-  m_LocalEulerAnglesHint: {x: 29.5, y: 90, z: 0}
+  m_LocalEulerAnglesHint: {x: 29.5, y: 0, z: 0}
 --- !u!1 &2116856002
 GameObject:
   m_ObjectHideFlags: 0
@@ -686,5 +686,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   projectile: {fileID: 373694057}
   target: {fileID: 823692322}
+  playerCamera: {fileID: 963194227}
   firingAngle: 45
   gravity: 9.8
+  minDist: 8
